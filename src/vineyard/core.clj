@@ -19,12 +19,12 @@
                           (string/join ", "))]
       (str fn-name "(" arg-string ")"))))
 
-(defn save [program path]
-  (let [before (slurp (io/resource "before.js"))
-        after  (slurp (io/resource "after.js"))]
-    (spit path (str before program after))))
-
 (extend-type clojure.lang.PersistentVector
   Compile
   (compile [coll]
     (str/join "\n" (map compile coll))))
+
+(defn save [program path]
+  (let [before (slurp (io/resource "before.js"))
+        after  (slurp (io/resource "after.js"))]
+    (spit path (str before program after))))
