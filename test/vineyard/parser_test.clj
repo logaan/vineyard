@@ -1,4 +1,4 @@
-(ns vineyard.parser-text
+(ns vineyard.parser-test
   (:require [vineyard.core :as vy]
             [vineyard.parser :as sut]
             [clojure.test :refer [deftest is]]))
