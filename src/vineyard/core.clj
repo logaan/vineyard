@@ -1,7 +1,6 @@
 (ns vineyard.core
   (:require [clojure.string :as string]
-            [clojure.java.io :as io]
-            [clojure.string :as str])
+            [clojure.java.io :as io])
   (:refer-clojure :exclude [compile]))
 
 (defprotocol Compile
@@ -22,7 +21,7 @@
 (extend-type clojure.lang.PersistentVector
   Compile
   (compile [coll]
-    (str/join "\n" (map compile coll))))
+    (string/join "\n" (map compile coll))))
 
 (defn save [program path]
   (let [before (slurp (io/resource "before.js"))
