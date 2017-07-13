@@ -4,6 +4,11 @@
             [clojure.java.io :as io]
             [clojure.java.shell :as shell]))
 
+(defn run [sexp]
+  (let [path "target/out.js"]
+    (vy/save (vy/compile sexp) path)
+    (shell/sh "node" path)))
+
 (def hello-world-sexp
   (vy/->Call "log" [(vy/->Text "Hello, World.")]))
 
@@ -12,7 +17,7 @@
          (vy/compile hello-world-sexp))))
 
 (deftest hello-world-saves
-  (let [path "target/out.js"]
-    (vy/save (vy/compile hello-world-sexp) path)
-    (is (= {:exit 0 :out "Hello, World.\n" :err ""}
-           (shell/sh "node" path)))))
+  (is (= {:exit 0
+          :out "Hello, World.\n"
+          :err ""}
+         (run hello-world-sexp))))
