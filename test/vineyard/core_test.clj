@@ -1,13 +1,6 @@
 (ns vineyard.core-test
   (:require [clojure.test :refer :all]
-            [vineyard.core :as vy]
-            [clojure.java.io :as io]
-            [clojure.java.shell :as shell]))
-
-(defn run [sexp]
-  (let [path "target/out.js"]
-    (vy/save (vy/compile sexp) path)
-    (shell/sh "node" path)))
+            [vineyard.core :as vy]))
 
 (def hello-world-sexp
   [(vy/->Call "log" [(vy/->Text "Hello, World.")])])
@@ -31,9 +24,3 @@
   (let [expr [(vy/->Call "a" [(vy/->Text "b")(vy/->Text "c")])]]
     (is (= "a(\"b\", \"c\")"
            (vy/compile expr)))))
-
-(deftest hello-world-runs
-  (is (= {:exit 0
-          :out "Hello, World.\n"
-          :err ""}
-         (run hello-world-sexp))))

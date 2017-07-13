@@ -1,1 +1,1 @@
-#vineyard.core.Call{:fn-name "log", :arguments [#vineyard.core.Text{:text "Hello, World."}]}
+[#vineyard.core.Call{:fn-name "log", :arguments [#vineyard.core.Text{:text "Hello, World."}]}]
