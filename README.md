@@ -1,5 +1,7 @@
 # vineyard
 
+[![Build Status](https://travis-ci.org/logaan/vineyard.svg?branch=master)](https://travis-ci.org/logaan/vineyard)
+
 Here I intend to implement a small lisp with blocking concurrency semantics and
 threads that compiles to Javascript.
 
