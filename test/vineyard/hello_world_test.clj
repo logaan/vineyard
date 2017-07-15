@@ -4,8 +4,7 @@
             [vineyard.parser :as parser]
             [clojure.test :as t :refer [deftest is]]
             [clojure.java.io :as io]
-            [clojure.java.shell :as shell]
-            [clojure.string :as str]))
+            [clojure.string :as string]))
 
 (defn source []
   (slurp (io/resource "01_hello_world.vy")))
@@ -24,15 +23,10 @@
    :out out
    :err ""})
 
-(defn run [code]
-  (let [path "target/out.js"]
-    (core/save code path)
-    (shell/sh "node" path)))
-
 (deftest runs-end-to-end
   (let [parsed   (parser/parse (source))
         compiled (compiler/compile parsed)
-        ran      (run compiled)]
+        ran      (core/run compiled)]
     (is (= (sexp) parsed))
-    (is (= (str/trim (js)) compiled))
+    (is (= (string/trim (js)) compiled))
     (is (= (error-free (out)) ran))))

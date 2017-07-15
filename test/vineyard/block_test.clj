@@ -2,7 +2,9 @@
   (:require [vineyard.block :as sut]
             [clojure.test :refer [deftest is]]
             [vineyard.data :as data]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [vineyard.compiler :as compiler]
+            [vineyard.core :as core]))
 
 (deftest blocking-calls
   (is (sut/blocking-call? (data/call "sleep" [])))
@@ -31,3 +33,20 @@
 (deftest leaves-non-blocking-alone []
   (is (= (hello-world)
          (sut/pass-continuation-to-first-blocking (hello-world)))))
+
+(defn multiple-pre []
+  (read-string (slurp (io/resource "03_hi_sleep_ok_sleep_bye.pre.clj"))))
+
+(defn multiple-post []
+  (read-string (slurp (io/resource "03_hi_sleep_ok_sleep_bye.post.clj"))))
+
+(deftest can-handle-multiple-top-level-blocking-calls []
+  (is (= (multiple-post)
+         (sut/pass-continuation-to-first-blocking (multiple-pre)))))
+
+(defn runs-multiple []
+  (let [parsed      (multiple-pre)
+        transformed (sut/pass-continuation-to-first-blocking parsed)
+        compiled    (compiler/compile transformed)
+        ran         (core/run compiled)]
+    ran))

@@ -31,3 +31,9 @@
   Compile
   (compile [coll]
     (str (string/join ";\n" (map compile coll)) ";")))
+
+
+(extend-type clojure.lang.PersistentVector$ChunkedSeq
+  Compile
+  (compile [coll]
+    (str (string/join ";\n" (map compile coll)) ";")))
