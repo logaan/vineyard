@@ -28,14 +28,14 @@
 
 (deftest passes-continuation-to-first-blocking
   (is (= (hi-sleep-bye-post)
-         (sut/pass-continuation-to-first-blocking (hi-sleep-bye-pre)))))
+         (sut/make-blocking (hi-sleep-bye-pre)))))
 
 (defn hello-world []
   (read-string (slurp (io/resource "01_hello_world.clj"))))
 
 (deftest leaves-non-blocking-alone []
   (is (= (hello-world)
-         (sut/pass-continuation-to-first-blocking (hello-world)))))
+         (sut/make-blocking (hello-world)))))
 
 (defn source []
   (slurp (io/resource "03_hi_sleep_ok_sleep_bye.vy")))
@@ -54,11 +54,11 @@
 
 (deftest can-handle-multiple-top-level-blocking-calls []
   (is (= (post)
-         (sut/pass-continuation-to-first-blocking (pre)))))
+         (sut/make-blocking (pre)))))
 
 (deftest runs-multiple
   (let [parsed   (parser/parse (source))
-        blocking (sut/pass-continuation-to-first-blocking parsed)
+        blocking (sut/make-blocking parsed)
         compiled (compiler/compile blocking)
         ran      (core/run compiled)]
     (is (= (pre) parsed))

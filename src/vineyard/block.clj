@@ -18,10 +18,10 @@
 (defn prepend-argument [call argument]
   (update-in call [:arguments] (fn [arguments] (into [argument] arguments))))
 
-(defn pass-continuation-to-first-blocking [exprs]
+(defn make-blocking [exprs]
   (let [[before call after] (find-blocking exprs)]
     (if call
-      (let [blocking-body     (pass-continuation-to-first-blocking after)
+      (let [blocking-body     (make-blocking after)
             continuation      (data/anonymous-function [] blocking-body)
             new-blocking-call (prepend-argument call continuation)]
         (conj before new-blocking-call))
