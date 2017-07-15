@@ -18,8 +18,6 @@
                           (string/join ", "))]
       (str fn-name "(" arg-string ")"))))
 
-;; parameters (seq String)
-;; body (vec Compileable)
 (defrecord AnonymousFunction [parameters body]
   Compile
   (compile [_]
