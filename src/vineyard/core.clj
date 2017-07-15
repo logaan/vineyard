@@ -21,7 +21,7 @@
 (extend-type clojure.lang.PersistentVector
   Compile
   (compile [coll]
-    (string/join "\n" (map compile coll))))
+    (str (string/join ";\n" (map compile coll)) ";")))
 
 (defn save [program path]
   (let [before (slurp (io/resource "before.js"))
