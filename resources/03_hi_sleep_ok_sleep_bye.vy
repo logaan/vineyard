@@ -1,0 +1,5 @@
+(log "hi")
+(sleep)
+(log "ok")
+(sleep)
+(log "bye")

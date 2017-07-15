@@ -49,4 +49,6 @@
         transformed (sut/pass-continuation-to-first-blocking parsed)
         compiled    (compiler/compile transformed)
         ran         (core/run compiled)]
-    ran))
+    (is (= (sexp) parsed))
+    (is (= (string/trim (js)) compiled))
+    (is (= (error-free (out)) ran))))
