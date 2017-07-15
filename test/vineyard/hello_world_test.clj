@@ -33,8 +33,6 @@
   (let [parsed   (parser/parse (source))
         compiled (compiler/compile parsed)
         ran      (run compiled)]
-    ;; This is intermetently failing for no good reason. The things that should
-    ;; be equal are printing as equal.
-    ;; (is (= (sexp) parsed))
+    (is (= (sexp) parsed))
     (is (= (str/trim (js)) compiled))
     (is (= (error-free (out)) ran))))
