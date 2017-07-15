@@ -4,7 +4,10 @@
             [vineyard.data :as data]
             [clojure.java.io :as io]
             [vineyard.compiler :as compiler]
-            [vineyard.core :as core]))
+            [vineyard.core :as core]
+            [vineyard.parser :as parser]
+            [clojure.string :as string]
+            [vineyard.test-helpers :as test-helpers]))
 
 (deftest blocking-calls
   (is (sut/blocking-call? (data/call "sleep" [])))
@@ -34,21 +37,31 @@
   (is (= (hello-world)
          (sut/pass-continuation-to-first-blocking (hello-world)))))
 
-(defn multiple-pre []
+(defn source []
+  (slurp (io/resource "03_hi_sleep_ok_sleep_bye.vy")))
+
+(defn pre []
   (read-string (slurp (io/resource "03_hi_sleep_ok_sleep_bye.pre.clj"))))
 
-(defn multiple-post []
+(defn post []
   (read-string (slurp (io/resource "03_hi_sleep_ok_sleep_bye.post.clj"))))
 
-(deftest can-handle-multiple-top-level-blocking-calls []
-  (is (= (multiple-post)
-         (sut/pass-continuation-to-first-blocking (multiple-pre)))))
+(defn js []
+  (slurp (io/resource "03_hi_sleep_ok_sleep_bye.js")))
 
-(defn runs-multiple []
-  (let [parsed      (multiple-pre)
-        transformed (sut/pass-continuation-to-first-blocking parsed)
-        compiled    (compiler/compile transformed)
-        ran         (core/run compiled)]
-    (is (= (sexp) parsed))
+(defn out []
+  (slurp (io/resource "03_hi_sleep_ok_sleep_bye.out")))
+
+(deftest can-handle-multiple-top-level-blocking-calls []
+  (is (= (post)
+         (sut/pass-continuation-to-first-blocking (pre)))))
+
+(deftest runs-multiple
+  (let [parsed   (parser/parse (source))
+        blocking (sut/pass-continuation-to-first-blocking parsed)
+        compiled (compiler/compile blocking)
+        ran      (core/run compiled)]
+    (is (= (pre) parsed))
+    (is (= (post) blocking))
     (is (= (string/trim (js)) compiled))
-    (is (= (error-free (out)) ran))))
+    (is (= (test-helpers/error-free (out)) ran))))
