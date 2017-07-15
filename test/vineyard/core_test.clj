@@ -24,3 +24,8 @@
   (let [expr [(vy/->Call "a" [(vy/->Text "b")(vy/->Text "c")])]]
     (is (= "a(\"b\", \"c\");"
            (vy/compile expr)))))
+
+(deftest annonymous-function
+  (let [expr [(vy/->AnonymousFunction ["foo" "bar"] [(vy/->Text "baz")])]]
+    (is (= "function(foo, bar){\n\"baz\";\n};"
+           (vy/compile expr)))))

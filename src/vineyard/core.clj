@@ -18,6 +18,16 @@
                           (string/join ", "))]
       (str fn-name "(" arg-string ")"))))
 
+;; parameters (seq String)
+;; body (vec Compileable)
+(defrecord AnonymousFunction [parameters body]
+  Compile
+  (compile [_]
+    (let [param-string (string/join ", " parameters)]
+      (str "function(" param-string "){\n"
+           (compile body)
+           "\n}"))))
+
 (extend-type clojure.lang.PersistentVector
   Compile
   (compile [coll]
