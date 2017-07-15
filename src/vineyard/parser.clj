@@ -1,5 +1,5 @@
 (ns vineyard.parser
-  (:require [vineyard.core :as core]
+  (:require [vineyard.data :as data]
             [blancas.kern.core :refer :all :exclude [parse]]
             [blancas.kern.lexer.basic :refer :all]))
 
@@ -7,13 +7,13 @@
 
 (def text
   (bind [t string-lit]
-        (return (core/->Text t))))
+        (return (data/text t))))
 
 (def call
   (parens
    (bind [fn-name   identifier
           arguments (comma-sep expr)]
-         (return (core/->Call fn-name arguments)))))
+         (return (data/call fn-name arguments)))))
 
 (def expr
   (<|> text call))

@@ -1,5 +1,6 @@
 (ns vineyard.hello-world-test
   (:require [vineyard.core :as core]
+            [vineyard.compiler :as compiler]
             [vineyard.parser :as parser]
             [clojure.test :as t :refer [deftest is]]
             [clojure.java.io :as io]
@@ -10,7 +11,7 @@
   (slurp (io/resource "01_hello_world.vy")))
 
 (defn sexp []
-  (read-string (slurp (io/resource "01_hello_world.sexp"))))
+  (read-string (slurp (io/resource "01_hello_world.clj"))))
 
 (defn js []
   (slurp (io/resource "01_hello_world.js")))
@@ -30,7 +31,7 @@
 
 (deftest runs-end-to-end
   (let [parsed   (parser/parse (source))
-        compiled (core/compile parsed)
+        compiled (compiler/compile parsed)
         ran      (run compiled)]
     ;; This is intermetently failing for no good reason. The things that should
     ;; be equal are printing as equal.

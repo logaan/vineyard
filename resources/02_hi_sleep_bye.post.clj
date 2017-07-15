@@ -1,12 +1,12 @@
-[#vineyard.core.Call
+[#vineyard.data.Call
  {:fn-name   "log"
-  :arguments [#vineyard.core.Text
+  :arguments [#vineyard.data.Text
               {:text "hi"}]}
- #vineyard.core.Call
+ #vineyard.data.Call
  {:fn-name   "sleep"
-  :arguments [#vineyard.core.AnonymousFunction
+  :arguments [#vineyard.data.AnonymousFunction
               {:parameters []
-               :body [#vineyard.core.Call
+               :body [#vineyard.data.Call
                       {:fn-name   "log"
-                       :arguments [#vineyard.core.Text
+                       :arguments [#vineyard.data.Text
                                    {:text "bye"}]}]}]}]

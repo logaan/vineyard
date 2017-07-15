@@ -1,8 +1,8 @@
 (ns vineyard.parser-test
-  (:require [vineyard.core :as vy]
+  (:require [vineyard.data :refer [call text]]
             [vineyard.parser :as sut]
             [clojure.test :refer [deftest is]]))
 
 (deftest parses-hello-world
-  (is (= [(vy/->Call "log" [(vy/->Text "Hello, World.")])]
+  (is (= [(call "log" [(text "Hello, World.")])]
          (sut/parse "(log \"Hello, World.\")"))))

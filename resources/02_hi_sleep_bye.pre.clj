@@ -1,6 +1,6 @@
-[#vineyard.core.Call{:fn-name   "log"
-                     :arguments [#vineyard.core.Text{:text "hi"}]}
- #vineyard.core.Call{:fn-name   "sleep"
+[#vineyard.data.Call{:fn-name   "log"
+                     :arguments [#vineyard.data.Text{:text "hi"}]}
+ #vineyard.data.Call{:fn-name   "sleep"
                      :arguments []}
- #vineyard.core.Call{:fn-name   "log"
-                     :arguments [#vineyard.core.Text{:text "bye"}]}]
+ #vineyard.data.Call{:fn-name   "log"
+                     :arguments [#vineyard.data.Text{:text "bye"}]}]
