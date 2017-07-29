@@ -45,8 +45,9 @@
      :compiled     (string/trim (slurp-res "4_compiled.js"))
      :output       (slurp-res "5_output.txt")}))
 
-(defn run-from-test-data [expected]
-  (let [parse-sexp   (parser/parse (:source expected))
+(defn run-from-test-data [directory]
+  (let [expected     (read-test-data directory)
+        parse-sexp   (parser/parse (:source expected))
         compile-sexp (sut/make-blocking parse-sexp)
         compiled     (compiler/compile compile-sexp)
         output       (core/run compiled)]
@@ -56,4 +57,4 @@
     (is (= (test-helpers/error-free (:output expected)) output))))
 
 (deftest runs-multiple
-  (run-from-test-data (read-test-data "03_hi_sleep_ok_sleep_bye/")))
+  (run-from-test-data "03_hi_sleep_ok_sleep_bye/"))

@@ -4,4 +4,3 @@
   {:exit 0
    :out out
    :err ""})
-
