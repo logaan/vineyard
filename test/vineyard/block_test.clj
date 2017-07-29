@@ -37,31 +37,23 @@
   (is (= (hello-world)
          (sut/make-blocking (hello-world)))))
 
-(defn source []
-  (slurp (io/resource "03_hi_sleep_ok_sleep_bye.vy")))
+(defn read-test-data [directory]
+  (letfn [(slurp-res [filename] (slurp (io/resource (str directory filename))))]
+    {:source       (slurp-res "1_source.vy")
+     :parse-sexp   (read-string (slurp-res "2_parse_sexp.clj"))
+     :compile-sexp (read-string (slurp-res "3_compile_sexp.clj"))
+     :compiled     (string/trim (slurp-res "4_compiled.js"))
+     :output       (slurp-res "5_output.txt")}))
 
-(defn pre []
-  (read-string (slurp (io/resource "03_hi_sleep_ok_sleep_bye.pre.clj"))))
-
-(defn post []
-  (read-string (slurp (io/resource "03_hi_sleep_ok_sleep_bye.post.clj"))))
-
-(defn js []
-  (slurp (io/resource "03_hi_sleep_ok_sleep_bye.js")))
-
-(defn out []
-  (slurp (io/resource "03_hi_sleep_ok_sleep_bye.out")))
-
-(deftest can-handle-multiple-top-level-blocking-calls []
-  (is (= (post)
-         (sut/make-blocking (pre)))))
+(defn run-from-test-data [expected]
+  (let [parse-sexp   (parser/parse (:source expected))
+        compile-sexp (sut/make-blocking parse-sexp)
+        compiled     (compiler/compile compile-sexp)
+        output       (core/run compiled)]
+    (is (= (:parse-sexp expected) parse-sexp))
+    (is (= (:compile-sexp expected) compile-sexp))
+    (is (= (:compiled expected) compiled))
+    (is (= (test-helpers/error-free (:output expected)) output))))
 
 (deftest runs-multiple
-  (let [parsed   (parser/parse (source))
-        blocking (sut/make-blocking parsed)
-        compiled (compiler/compile blocking)
-        ran      (core/run compiled)]
-    (is (= (pre) parsed))
-    (is (= (post) blocking))
-    (is (= (string/trim (js)) compiled))
-    (is (= (test-helpers/error-free (out)) ran))))
+  (run-from-test-data (read-test-data "03_hi_sleep_ok_sleep_bye/")))
